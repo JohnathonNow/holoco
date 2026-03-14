@@ -90,9 +90,13 @@ class Expression {
     this.element = document.createElement('div');
     this.element.className = 'expression ' + component.name.toLowerCase().replace(' ', '-');
 
-    // Parse the template and replace <argument/> with Argument instances
+    // // Normalize custom <block> tags into real HTML so the browser will preserve them.
+    // const normalizedTemplate = component.template
+    //   .replace(/<block>/gi, '<div class="block">')
+    //   .replace(/<\/block>/gi, '</div>');
+    const normalizedTemplate = component.template;
     const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = component.template;
+    tempDiv.innerHTML = normalizedTemplate;
 
     this.processTemplate(tempDiv, this.element);
   }
@@ -102,10 +106,18 @@ class Expression {
   }
 
   private processTemplate(template: HTMLElement, target: HTMLElement) {
+    console.log('Processing template:', template);
     Array.from(template.childNodes).forEach(node => {
+        console.log(node);
       if (node.nodeType === Node.ELEMENT_NODE) {
         const el = node as HTMLElement;
-        if (el.tagName === 'ARGUMENT') {
+        if (el.tagName === 'BLOCK') {
+          // For blocks, we can have multiple arguments
+          const blockContainer = document.createElement('div');
+          blockContainer.className = 'block';
+          target.appendChild(blockContainer);
+          this.processTemplate(el, blockContainer);
+        } else if (el.tagName === 'ARGUMENT') {
           // Replace with Argument
           const isInBlock = this.hasBlockParent(el);
           const arg = new Argument(this.editor, isInBlock);
@@ -122,11 +134,10 @@ class Expression {
             select.appendChild(option);
           });
           target.appendChild(select);
-          // Copy other elements
-          const clone = el.cloneNode(true) as HTMLElement;
-          target.appendChild(clone);
+        } else {
+            target.appendChild(node.cloneNode(true));
         }
-      } else if (node.nodeType === Node.TEXT_NODE) {
+      } else {
         target.appendChild(node.cloneNode(true));
       }
     });
@@ -135,7 +146,8 @@ class Expression {
   private hasBlockParent(el: HTMLElement): boolean {
     let parent = el.parentElement;
     while (parent) {
-      if (parent.tagName === 'BLOCK') return true;
+      // Accept both <block> (template form) and rendered div.block
+      if (parent.nodeName === 'BLOCK' || parent.classList.contains('block')) return true;
       parent = parent.parentElement;
     }
     return false;
