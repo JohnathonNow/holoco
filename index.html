@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Low-Code Editor</title>
+    <style>
+        .expression { border: 1px solid #ccc; padding: 10px; margin: 5px; }
+        .argument { border: 1px dashed #999; padding: 5px; margin: 5px; }
+        .block { border-left: 2px solid #000; padding-left: 10px; margin: 5px; }
+        .component-chooser { z-index: 1000; }
+    </style>
+</head>
+<body>
+    <h1>Low-Code Expression Editor</h1>
+    <div id="editor"></div>
+    <script src="dist/editor.js"></script>
+    <script>
+        // Since it's TypeScript, need to compile or use a bundler, but for demo
+        // Assume editor.js is compiled
+        new Editor(document.getElementById('editor'));
+    </script>
+</body>
+</html>

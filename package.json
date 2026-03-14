@@ -1,0 +1,25 @@
+{
+  "name": "holoco",
+  "version": "1.0.0",
+  "description": "A low-code editor.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JohnathonNow/holoco.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/JohnathonNow/holoco/issues"
+  },
+  "homepage": "https://github.com/JohnathonNow/holoco#readme",
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
